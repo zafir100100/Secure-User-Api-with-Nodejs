@@ -1,10 +1,1 @@
-{
-    "users": [
-        {
-            "id": 1,
-            "name": "Margarett88",
-            "email": "a@a.a",
-            "password": "$2a$10$FL2uryZQlIwCAsp9wrjv4eM0rMT3LEecYTpk098WfmyHbw.LQ5tH6"
-        }
-    ]
-}
+{"users":[{"id":1,"name":"Margarett88","email":"a@a.a","password":"$2a$10$FL2uryZQlIwCAsp9wrjv4eM0rMT3LEecYTpk098WfmyHbw.LQ5tH6"},{"id":2,"name":"Jammie86","email":"b@b.b","password":"$2a$10$3DQFszfNeTpLURy3qAtVT.SgepVbz9h5P66YBmdiPgRNnhZyuXpxa"}]}

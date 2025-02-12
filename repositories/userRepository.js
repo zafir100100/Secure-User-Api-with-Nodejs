@@ -1,12 +1,30 @@
 const bcrypt = require('bcryptjs');
 const fs = require('fs-extra');
+const AuthService = require('../services/authService');
 
 class UserRepository {
     constructor() {
         this.dbPath = './db/db.json';
+        this.authService = new AuthService();
     }
 
-    async getAllUsers() {
+    getUserByEmailAndPassword = async (email, password) => {
+        try {
+            const { users } = await fs.readJson(this.dbPath);
+            const user = users.find(u => u.email === email);
+            if (!user) throw new Error('User not found');
+            
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) throw new Error('Invalid password');
+            
+            const token = this.authService.generateToken(user);
+            return { token };
+        } catch (error) {
+            throw new Error('Error fetching user by email and password');
+        }
+    }
+
+    getAllUsers = async () => {
         try {
             const { users } = await fs.readJson(this.dbPath);
             return users;
@@ -15,7 +33,7 @@ class UserRepository {
         }
     }
 
-    async getUserById(userId) {
+    getUserById = async (userId) => {
         try {
             const { users } = await fs.readJson(this.dbPath);
             const user = users.find(u => u.id === userId);
@@ -26,7 +44,7 @@ class UserRepository {
         }
     }
 
-    async createUser(name, email, password) {
+    createUser = async (name, email, password) => {
         if (!name || !email || !password) {
             throw new Error('Missing required fields');
         }

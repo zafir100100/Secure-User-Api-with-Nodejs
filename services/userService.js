@@ -5,27 +5,39 @@ class UserService {
         this.userRepository = new UserRepository();
     }
 
-    async getAllUsers() {
+    getUserByEmailAndPassword = async (email, password) => {
         try {
-            return await this.userRepository.getAllUsers();
+            const user = await this.userRepository.getUserByEmailAndPassword(email, password);
+            return user;
         } catch (error) {
-            throw new Error('Service: Error fetching users');
+            throw new Error('Error in user service: ' + error.message);
         }
     }
 
-    async getUserById(userId) {
+    getAllUsers = async () => {
         try {
-            return await this.userRepository.getUserById(userId);
+            const users = await this.userRepository.getAllUsers();
+            return users;
         } catch (error) {
-            throw new Error('Service: Error fetching user');
+            throw new Error('Error in user service: ' + error.message);
         }
     }
 
-    async createUser(name, email, password) {
+    getUserById = async (userId) => {
         try {
-            return await this.userRepository.createUser(name, email, password);
+            const user = await this.userRepository.getUserById(userId);
+            return user;
         } catch (error) {
-            throw new Error('Service: Error creating user');
+            throw new Error('Error in user service: ' + error.message);
+        }
+    }
+
+    createUser = async (name, email, password) => {
+        try {
+            const newUser = await this.userRepository.createUser(name, email, password);
+            return newUser;
+        } catch (error) {
+            throw new Error('Error in user service: ' + error.message);
         }
     }
 }

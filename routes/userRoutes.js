@@ -1,6 +1,5 @@
 const express = require('express');
 const UserController = require('../controllers/userController');
-const { authenticateToken } = require('../middlewares/authMiddleware');
 
 class UserRoutes {
     constructor() {
@@ -10,9 +9,10 @@ class UserRoutes {
     }
 
     routes() {
-        this.router.get('/users', authenticateToken, this.userController.getAllUsers);
-        this.router.get('/users/:id', authenticateToken, this.userController.getUserById);
+        this.router.get('/users', this.userController.getAllUsers);
+        this.router.get('/users/:id', this.userController.getUserById);
         this.router.post('/users', this.userController.createUser);
+        this.router.post('/users/login', this.userController.getUserByEmailAndPassword);  // Login route
     }
 
     getRoutes() {
