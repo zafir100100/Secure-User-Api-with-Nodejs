@@ -1,12 +1,10 @@
 const jwt = require('jsonwebtoken');
 
-const SECRET_KEY = process.env.JWT_SECRET_KEY;
-
 class AuthRepository {
     generateToken = (user) => {
         const token = jwt.sign(
             { id: user.id, email: user.email },
-            SECRET_KEY,
+            process.env.JWT_SECRET_KEY,
             { expiresIn: '1h' }
         );
         return token;
@@ -14,7 +12,7 @@ class AuthRepository {
 
     verifyToken = (token) => {
         try {
-            const decoded = jwt.verify(token, SECRET_KEY);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
             return decoded;
         } catch (error) {
             throw new Error('Invalid or expired token');

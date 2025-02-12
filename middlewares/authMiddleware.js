@@ -1,10 +1,6 @@
 const jwt = require('jsonwebtoken');
 
 class AuthMiddleware {
-    constructor(secretKey) {
-        this.secretKey = secretKey;
-    }
-
     authenticateToken = (req, res, next) => {
         const authHeader = req.header('Authorization');
 
@@ -18,7 +14,7 @@ class AuthMiddleware {
             return res.status(400).send('Invalid token format');
         }
 
-        jwt.verify(token, this.secretKey, (err, user) => {
+        jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
             if (err) {
                 return res.status(403).send('Invalid token');
             }
@@ -28,7 +24,6 @@ class AuthMiddleware {
     }
 }
 
-const SECRET_KEY = process.env.JWT_SECRET_KEY;
-const authMiddleware = new AuthMiddleware(SECRET_KEY);
+const authMiddleware = new AuthMiddleware();
 
 module.exports = { authenticateToken: authMiddleware.authenticateToken };
