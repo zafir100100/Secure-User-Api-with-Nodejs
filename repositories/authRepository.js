@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const SECRET_KEY = 'your_jwt_secret_key';
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 class AuthRepository {
     generateToken = (user) => {
