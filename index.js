@@ -6,10 +6,10 @@ const AuthRoutes = require('./routes/authRoutes');
 const UserRoutes = require('./routes/userRoutes');
 
 const app = express();
-const port = 5000;
+const port = process.env.API_SERVER_PORT;
 
-app.use(bodyParser.json());
 app.use(cors());
+app.use(bodyParser.json());
 
 const authRoutes = new AuthRoutes();
 const userRoutes = new UserRoutes();
@@ -17,6 +17,6 @@ const userRoutes = new UserRoutes();
 app.use('/api', authRoutes.getRoutes());
 app.use('/api', userRoutes.getRoutes());
 
-app.listen(process.env.API_SERVER_PORT, () => {
+app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

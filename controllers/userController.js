@@ -1,13 +1,16 @@
-const bcrypt = require('bcryptjs');
-const { loadUsers, saveUsers } = require('../models/userModel');
+const UserService = require('../services/userService');
 
 class UserController {
+    constructor() {
+        this.userService = new UserService();
+    }
+
     async getAllUsers(req, res) {
         try {
-            const { users } = await loadUsers();
+            const users = await this.userService.getAllUsers();
             res.json(users);
         } catch (error) {
-            res.status(500).json({ message: 'Error fetching users' });
+            res.status(500).json({ message: error.message });
         }
     }
 
@@ -15,36 +18,21 @@ class UserController {
         const userId = parseInt(req.params.id, 10);
 
         try {
-            const { users } = await loadUsers();
-            const user = users.find(u => u.id === userId);
-
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-
+            const user = await this.userService.getUserById(userId);
             res.json(user);
         } catch (error) {
-            res.status(500).json({ message: 'Error fetching user' });
+            res.status(404).json({ message: error.message });
         }
     }
 
     async createUser(req, res) {
         const { name, email, password } = req.body;
 
-        if (!name || !email || !password) {
-            return res.status(400).json({ message: 'Missing required fields' });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
         try {
-            const { users } = await loadUsers();
-            const newUser = { id: users.length + 1, name, email, password: hashedPassword };
-            users.push(newUser);
-            await saveUsers(users);
+            const newUser = await this.userService.createUser(name, email, password);
             res.status(201).json(newUser);
         } catch (error) {
-            res.status(500).json({ message: 'Error adding user' });
+            res.status(400).json({ message: error.message });
         }
     }
 }
